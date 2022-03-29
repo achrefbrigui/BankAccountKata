@@ -1,5 +1,6 @@
 using BankAccount.Application;
 using BankAccount.Infrastructure;
+using BankAccount.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,7 @@ namespace BankAccount.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ExceptionHandlerMiddleware>();
             services.AddInfrastructure();
             services.AddApplication();
             services.AddControllers();
@@ -46,6 +48,8 @@ namespace BankAccount.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BankAccount.WebApi v1"));
             }
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
 
