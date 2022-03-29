@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\BankAccount.Infrastructure\BankAccount.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
