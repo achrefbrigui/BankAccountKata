@@ -9,6 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BankAccount.Application\BankAccount.Application.csproj" />
     <ProjectReference Include="..\BankAccount.Infrastructure\BankAccount.Infrastructure.csproj" />
   </ItemGroup>
 

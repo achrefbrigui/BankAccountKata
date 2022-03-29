@@ -20,7 +20,22 @@ namespace BankAccount.Application.Services
 
         public async Task<AccountModel> AddOperationAsync(string accountId, OperationModel operation)
         {
-            throw new NotImplementedException();
+            var acc = await _accountRepo.GetByIdAsync(accountId);
+            switch (operation.Type)
+            {
+                case Domain.Enums.EOperationType.Deposit:
+                    acc.Balance += operation.Amount;
+                    break;
+                case Domain.Enums.EOperationType.Withdrawal:
+                    acc.Balance -= operation.Amount;
+                    break;
+                default:
+                    break;
+            }
+            acc.Operations.Add(operation);
+            await _accountRepo.UpdateAsync(acc);
+
+            return acc;
         }
     }
 }

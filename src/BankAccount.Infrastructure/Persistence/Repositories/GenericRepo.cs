@@ -19,27 +19,33 @@ namespace BankAccount.Infrastructure.Persistence.Repositories
 
         public async Task<T> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();        
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public async Task<List<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<T> AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }
