@@ -27,7 +27,7 @@ namespace BankAccount.WebApi.IntegrationTests
 
         public async Task<AccountModel> AddAccountAsync()
         {
-            using var accReq = await _client.PutAsJsonAsync("Account", new AccountModel());
+            using var accReq = await _client.PostAsJsonAsync("Account", new AccountModel());
             return JsonConvert.DeserializeObject<AccountModel>(await accReq.Content.ReadAsStringAsync());
         }
     }

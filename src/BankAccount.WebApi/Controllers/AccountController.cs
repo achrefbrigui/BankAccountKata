@@ -25,7 +25,7 @@ namespace BankAccount.WebApi.Controllers
             _operationRepo = operationRepo;
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("Account")]
         public async Task<IActionResult> AddAccount([FromBody] AccountDTO account)
         {
@@ -46,7 +46,7 @@ namespace BankAccount.WebApi.Controllers
             return Ok(await _accountRepo.GetByIdAsync(id));
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("Account/{id}/Operations")]
         public async Task<IActionResult> AddOperation(string id, [FromBody] OperationDTO operation)
         {

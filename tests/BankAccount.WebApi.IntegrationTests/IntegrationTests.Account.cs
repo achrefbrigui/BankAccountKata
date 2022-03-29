@@ -16,13 +16,13 @@ namespace BankAccount.WebApi.IntegrationTests
         [Theory]
         [InlineData(300,400,700)]
         [InlineData(200,120,320)]
-        public async Task Put_DepositOperation(
+        public async Task Post_DepositOperation(
             float amount1,float amount2, float expectedBalance)
         {
             var accs = await AddAccountAsync();
 
-            await _client.PutAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = amount1, Type = Domain.Enums.EOperationType.Deposit });
-            using var opsReq = await _client.PutAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = amount2, Type = Domain.Enums.EOperationType.Deposit });
+            await _client.PostAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = amount1, Type = Domain.Enums.EOperationType.Deposit });
+            using var opsReq = await _client.PostAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = amount2, Type = Domain.Enums.EOperationType.Deposit });
             var acc = JsonConvert.DeserializeObject<AccountModel>(await opsReq.Content.ReadAsStringAsync());
 
             Assert.Equal(acc.Balance, expectedBalance);
@@ -31,14 +31,14 @@ namespace BankAccount.WebApi.IntegrationTests
         [Theory]
         [InlineData(300, 500, 200)]
         [InlineData(100, 50, -50)]
-        public async Task Put_WithdrawOperation(
+        public async Task Post_WithdrawOperation(
             float amount, float initialBalance, float expectedBalance)
         {
             var accs = await AddAccountAsync();
 
-            await _client.PutAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = initialBalance, Type = Domain.Enums.EOperationType.Deposit });
+            await _client.PostAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = initialBalance, Type = Domain.Enums.EOperationType.Deposit });
 
-            using var opsReq = await _client.PutAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = amount, Type = Domain.Enums.EOperationType.Withdrawal });
+            using var opsReq = await _client.PostAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = amount, Type = Domain.Enums.EOperationType.Withdrawal });
             var acc = JsonConvert.DeserializeObject<AccountModel>(await opsReq.Content.ReadAsStringAsync());
 
             Assert.Equal(acc.Balance, expectedBalance);
