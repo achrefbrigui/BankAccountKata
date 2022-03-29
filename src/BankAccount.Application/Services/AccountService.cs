@@ -1,5 +1,8 @@
-﻿using BankAccount.Application.Interfaces.Repositories;
+﻿using BankAccount.Application.Exceptions;
+using BankAccount.Application.Extensions;
+using BankAccount.Application.Interfaces.Repositories;
 using BankAccount.Application.Interfaces.Services;
+using BankAccount.Application.Wrappers;
 using BankAccount.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +24,8 @@ namespace BankAccount.Application.Services
         public async Task<AccountModel> AddOperationAsync(string accountId, OperationModel operation)
         {
             var acc = await _accountRepo.GetByIdAsync(accountId);
+            if (acc is null) throw new NotFoundException(nameof(AccountModel));
+            if (operation.Amount < 0) throw new BadRequestException("The operation amount should be positive");
             switch (operation.Type)
             {
                 case Domain.Enums.EOperationType.Deposit:

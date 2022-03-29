@@ -1,4 +1,5 @@
-﻿using BankAccount.Application.Interfaces.Repositories;
+﻿using BankAccount.Application.Exceptions;
+using BankAccount.Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,11 @@ namespace BankAccount.Infrastructure.Persistence.Repositories
 
         public async Task<T> GetByIdAsync(string id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            var output = await _context.Set<T>().FindAsync(id);
+
+            if (output == null) throw new NotFoundException(nameof(T));
+
+            return output;
         }
 
         public async Task<List<T>> GetAllAsync()

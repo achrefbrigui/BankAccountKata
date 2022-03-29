@@ -1,4 +1,5 @@
-﻿using BankAccount.Application.Interfaces.Repositories;
+﻿using BankAccount.Application.Extensions;
+using BankAccount.Application.Interfaces.Repositories;
 using BankAccount.Application.Interfaces.Services;
 using BankAccount.Domain.DTOs;
 using BankAccount.Domain.Models;
@@ -29,7 +30,7 @@ namespace BankAccount.WebApi.Controllers
         [Route("Account")]
         public async Task<IActionResult> AddAccount([FromBody] AccountDTO account)
         {
-            return Ok(await _accountRepo.AddAsync(new AccountModel(account)));
+            return Ok((await _accountRepo.AddAsync(new AccountModel(account))).Success());
         }
 
         [HttpGet]
@@ -43,21 +44,28 @@ namespace BankAccount.WebApi.Controllers
         [Route("Account/{id}")]
         public async Task<IActionResult> GetAccountById(string id )
         {
-            return Ok(await _accountRepo.GetByIdAsync(id));
+            return Ok((await _accountRepo.GetByIdAsync(id)).Success());
         }
 
         [HttpPost]
         [Route("Account/{id}/Operations")]
         public async Task<IActionResult> AddOperation(string id, [FromBody] OperationDTO operation)
         {
-            return Ok(await _accountService.AddOperationAsync(id, new OperationModel(operation)));
+            return Ok((await _accountService.AddOperationAsync(id, new OperationModel(operation))).Success());
         }
 
         [HttpGet]
         [Route("Account/{id}/Operations")]
         public async Task<IActionResult> GetAccountOperations(string id)
         {
-            return Ok((await _accountRepo.GetByIdAsync(id)).Operations);
+            return Ok(((await _accountRepo.GetByIdAsync(id)).Operations).Success());
+        }
+
+        [HttpGet]
+        [Route("Account/{id}/PaginatedOperations")]
+        public async Task<IActionResult> GetAccountPaginatedOperations(string id, [FromQuery] int pageNb, [FromQuery] int pageSize )
+        {
+            return Ok(((await _accountRepo.GetByIdAsync(id)).Operations.AsPagedData(pageNb,pageSize)).Success());
         }
     }
 }
