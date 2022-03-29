@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\BankAccount.Application\BankAccount.Application.csproj" />
+    <ProjectReference Include="..\..\src\BankAccount.Infrastructure\BankAccount.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\BankAccount.WebApi\BankAccount.WebApi.csproj" />
   </ItemGroup>
 

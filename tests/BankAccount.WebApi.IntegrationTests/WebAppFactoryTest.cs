@@ -23,8 +23,6 @@ namespace BankAccount.WebApi.IntegrationTests
                 var scopedServices = scope.ServiceProvider;
 
                 var db = scopedServices.GetRequiredService<AppDbContext>();
-                db.Account.Add(new Domain.Models.AccountModel());
-                db.SaveChanges();
             }
             );
         }
