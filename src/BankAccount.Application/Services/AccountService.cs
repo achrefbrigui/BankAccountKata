@@ -21,6 +21,11 @@ namespace BankAccount.Application.Services
             _accountRepo = accountRepo;
         }
 
+        public async Task<AccountModel> AddAsync(AccountModel entity)
+        {
+            return await _accountRepo.AddAsync(entity);
+        }
+
         public async Task<AccountModel> AddOperationAsync(string accountId, OperationModel operation)
         {
             var acc = await _accountRepo.GetByIdAsync(accountId);
@@ -41,6 +46,26 @@ namespace BankAccount.Application.Services
             await _accountRepo.UpdateAsync(acc);
 
             return acc;
+        }
+
+        public async Task DeleteAsync(AccountModel entity)
+        {
+            await _accountRepo.DeleteAsync(entity);
+        }
+
+        public async Task<List<AccountModel>> GetAllAsync()
+        {
+            return await _accountRepo.GetAllAsync();
+        }
+
+        public async Task<AccountModel> GetByIdAsync(string id)
+        {
+            return await _accountRepo.GetByIdAsync(id);
+        }
+
+        public async Task UpdateAsync(AccountModel entity)
+        {
+            await _accountRepo.UpdateAsync(entity);
         }
     }
 }
