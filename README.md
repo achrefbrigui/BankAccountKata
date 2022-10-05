@@ -1,7 +1,11 @@
 # BankAccountKata
 Kata link : https://gitlab.com/exalt-it-dojo/katas-c-sharp/-/tree/main/BankAccount
-## Refactor (Loading..)
+# Upgrades (out of kata user stories)
 
-- API response model
-- Create new exceptions for BadRequests/NotFound/InternalError
-- Exceptions Middleware 
+## User stories (Agent add account - Customer authenticate)
+
+- Implementation of account register (by agent)
+- Implementation od account authentication (jwt + http only cookie)
+- Implementation of role based authorisation (agent+customer)
+
+
