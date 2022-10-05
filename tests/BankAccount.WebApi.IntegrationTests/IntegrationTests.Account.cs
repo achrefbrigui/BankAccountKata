@@ -1,4 +1,5 @@
-﻿using BankAccount.Application.Wrappers;
+﻿using BankAccount.Application.Commands;
+using BankAccount.Application.Wrappers;
 using BankAccount.Domain.DTOs;
 using BankAccount.Domain.Models;
 using Newtonsoft.Json;
@@ -71,7 +72,7 @@ namespace BankAccount.WebApi.IntegrationTests
         {
             var accs = await AddAccountAsync();
 
-            var opsReq = await _client.PostAsJsonAsync($"Account/{accs.Id}/Operations", new OperationDTO() { Amount = amount, Type = Domain.Enums.EOperationType.Deposit });
+            var opsReq = await _client.PostAsJsonAsync($"Account/{accs.Id}/Operations", new AddOperationCommand() { Amount = amount, Type = Domain.Enums.EOperationType.Deposit });
             var res = JsonConvert.DeserializeObject<Response>(await opsReq.Content.ReadAsStringAsync());
 
             Assert.True(opsReq.StatusCode == System.Net.HttpStatusCode.BadRequest);
@@ -84,7 +85,7 @@ namespace BankAccount.WebApi.IntegrationTests
         public async Task Post_DepositOperation_ShouldReturnNotFound_WithInvalidAccountId(
            float amount)
         {
-            var opsReq = await _client.PostAsJsonAsync($"Account/{new Guid().ToString()}/Operations", new OperationDTO() { Amount = amount, Type = Domain.Enums.EOperationType.Deposit });
+            var opsReq = await _client.PostAsJsonAsync($"Account/{new Guid().ToString()}/Operations", new AddOperationCommand() { Amount = amount, Type = Domain.Enums.EOperationType.Deposit });
             var res = JsonConvert.DeserializeObject<Response>(await opsReq.Content.ReadAsStringAsync());
 
             Assert.False(res.Succeeded);

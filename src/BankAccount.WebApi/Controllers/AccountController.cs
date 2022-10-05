@@ -1,8 +1,16 @@
-﻿using BankAccount.Application.Extensions;
+﻿using BankAccount.Application.Commands;
+using BankAccount.Application.Extensions;
+using BankAccount.Application.Interfaces.Repositories;
 using BankAccount.Application.Interfaces.Services;
+using BankAccount.Application.Queries;
 using BankAccount.Domain.DTOs;
 using BankAccount.Domain.Models;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BankAccount.WebApi.Controllers
@@ -11,53 +19,56 @@ namespace BankAccount.WebApi.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private IMediator _mediator;
 
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, IMediator mediator)
         {
             _accountService = accountService;
+            _mediator = mediator;
         }
 
         [HttpPost]
         [Route("Account")]
-        public async Task<IActionResult> AddAccount([FromBody] AccountDTO account)
+        public async Task<IActionResult> AddAccount([FromBody] AddAccountCommand command)
         {
-            return Ok((await _accountService.AddAsync(new AccountModel(account))).Success());
+            return Ok((await _mediator.Send(command)).Success());
         }
 
         [HttpGet]
         [Route("Account")]
         public async Task<IActionResult> GetAllAccounts()
         {
-            return Ok((await _accountService.GetAllAsync()).Success());
+            return Ok((await _mediator.Send(new GetAllAccountsQuery())).Success());
         }
 
         [HttpGet]
         [Route("Account/{id}")]
         public async Task<IActionResult> GetAccountById(string id)
         {
-            return Ok((await _accountService.GetByIdAsync(id)).Success());
+            return Ok((await _mediator.Send(new GetAccountByIdQuery() { Id = id })).Success());
         }
 
         [HttpPost]
         [Route("Account/{id}/Operations")]
-        public async Task<IActionResult> AddOperation(string id, [FromBody] OperationDTO operation)
+        public async Task<IActionResult> AddOperation(string id, [FromBody] AddOperationCommand command)
         {
-            return Ok((await _accountService.AddOperationAsync(id, new OperationModel(operation))).Success());
+            command.Id = id;
+            return Ok((await _mediator.Send(command)).Success());
         }
 
         [HttpGet]
         [Route("Account/{id}/Operations")]
         public async Task<IActionResult> GetAccountOperations(string id)
         {
-            return Ok((await _accountService.GetByIdAsync(id)).Operations.Success());
+            return Ok((await _mediator.Send(new GetAccountOperationsQuery() { UserId = id })).Success());
         }
 
         [HttpGet]
         [Route("Account/{id}/PaginatedOperations")]
-        public async Task<IActionResult> GetAccountPaginatedOperations(string id, [FromQuery] int pageNb, [FromQuery] int pageSize )
+        public async Task<IActionResult> GetAccountPaginatedOperations(string id, [FromQuery] int pageNb, [FromQuery] int pageSize)
         {
-            return Ok((await _accountService.GetByIdAsync(id)).Operations.AsPagedData(pageNb,pageSize).Success());
+            return Ok((await _mediator.Send(new GetAccountOperationsQuery() { UserId = id })).AsPagedData(pageNb, pageSize).Success());
         }
     }
 }

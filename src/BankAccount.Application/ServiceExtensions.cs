@@ -1,11 +1,11 @@
 ﻿using BankAccount.Application.Interfaces.Services;
 using BankAccount.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using MediatR;
+
+
 
 namespace BankAccount.Application
 {
@@ -13,6 +13,7 @@ namespace BankAccount.Application
     {
         public static void AddApplication(this IServiceCollection services)
         {
+            services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped<IAccountService, AccountService>();
         }
     }

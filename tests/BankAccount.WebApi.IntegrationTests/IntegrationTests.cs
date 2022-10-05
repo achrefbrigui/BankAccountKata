@@ -1,4 +1,5 @@
-﻿using BankAccount.Application.Interfaces.Repositories;
+﻿using BankAccount.Application.Commands;
+using BankAccount.Application.Interfaces.Repositories;
 using BankAccount.Application.Interfaces.Services;
 using BankAccount.Application.Services;
 using BankAccount.Application.Wrappers;
@@ -28,7 +29,7 @@ namespace BankAccount.WebApi.IntegrationTests
 
         public async Task<AccountModel> AddAccountAsync()
         {
-            using var accReq = await _client.PostAsJsonAsync("Account", new AccountModel());
+            using var accReq = await _client.PostAsJsonAsync("Account", new AddAccountCommand());
             var res = JsonConvert.DeserializeObject<Response<AccountModel>>(await accReq.Content.ReadAsStringAsync());
             return res.Data;
         }
