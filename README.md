@@ -8,4 +8,10 @@ Kata link : https://gitlab.com/exalt-it-dojo/katas-c-sharp/-/tree/main/BankAccou
 - Implementation od account authentication (jwt + http only cookie)
 - Implementation of role based authorisation (agent+customer)
 
+## Quality assurance 
+
+- Addition of unit tests
+- Use of BDD
+
+Keywords : Clean architecture, CQRS, TDD, Integration tests, C# .NET, XUnit, Entity framework
 
